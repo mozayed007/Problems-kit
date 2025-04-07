@@ -70,27 +70,27 @@ The repository is organized to facilitate algorithmic problem-solving, performan
    ```
 
 4. View benchmark results in the `benchmarks/` directory
-   cd Problems-kit
-   ```
 
-2. Run the CLI interface:
+### Alternative Workflows
+
+1. Run the CLI interface:
    ```bash
    python problems_kit.py
    ```
 
-3. For quick testing of Python implementations:
+2. For testing implementations across platforms:
    ```bash
-   python run_python_implementations.py
+   python test_implementations.py
    ```
 
-4. For benchmarking with the enhanced system:
+3. For individual testing of implementations:
    ```bash
-   python run_benchmark_example.py
+   python -c "import sys; sys.path.insert(0, '.'); from solutions.group_01_linear_algebra.p001_matrix_vector_dot.python import solution_v1; print('Implementation loaded successfully')" 
    ```
 
-5. For verifying Python implementation setup:
+4. For benchmarking with customizable options:
    ```bash
-   python verify_python_implementation.py
+   python run_final_benchmark.py --problem-id p001_matrix_vector_dot --sizes 128,512,1024,2048
    ```
 
 ## Project Structure

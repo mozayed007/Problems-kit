@@ -413,8 +413,10 @@ Problems-kit/
 │   ├── csv/                         # CSV exports of benchmark results
 │   └── visualizations/              # Generated plots and visualization files
 │
-└── tests/                           # Test cases for solutions
-    └── test_implementations.py      # Test suite for verifying implementations
+├── tests/                           # Test cases for specific problems
+│   └── test_p001_matrix_vector_dot.py # Tests for Problem 1
+│
+└── test_implementations.py          # Comprehensive multi-platform test suite
 ```
 
 ## Routine Problem-Solving Workflow

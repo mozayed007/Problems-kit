@@ -118,14 +118,14 @@ This document provides a step-by-step routine for solving problems using the Pro
 
 ### Step 5: Test Your Baseline Implementation
 
-1. Run the verification script to check your environment:
+1. Run the comprehensive test script to verify across platforms:
    ```bash
-   python verify_python_implementation.py
+   python test_implementations.py
    ```
 
-2. Test your specific implementation:
+2. Test your specific implementation with options:
    ```bash
-   python test_implementation.py
+   python test_implementations.py --problem=pXXX_problem_name --implementations python.v1
    ```
 
 3. Or create a test helper in your solution file:
@@ -225,7 +225,7 @@ This document provides a step-by-step routine for solving problems using the Pro
 
 1. Verify correctness:
    ```bash
-   python test_implementation.py --problem_id pXXX_problem_name --implementation python.v2_optimized
+   python test_implementations.py --problem=pXXX_problem_name --implementations python.v2_optimized
    ```
 
 2. Update your benchmark configuration to include both implementations:
