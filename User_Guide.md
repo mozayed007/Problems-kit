@@ -16,10 +16,11 @@
   - [Direct Testing](#direct-testing)
   - [Custom Testing Scripts](#custom-testing-scripts)
 - [Benchmarking System](#benchmarking-system)
-  - [Basic Benchmarking](#basic-benchmarking)
-  - [Advanced Benchmark Options](#advanced-benchmark-options)
-  - [CSV Export and Analysis](#csv-export-and-analysis)
-  - [Visualization Options](#visualization-options)
+  - [Unified Benchmarking Framework](#unified-benchmarking-framework)
+  - [Configuration-Driven Benchmarks](#configuration-driven-benchmarks)
+  - [Input Generation System](#input-generation-system)
+  - [Advanced Visualization Suite](#advanced-visualization-suite)
+  - [Data Export Options](#data-export-options)
 - [Directory Structure](#directory-structure)
 - [Routine Problem-Solving Workflow](#routine-problem-solving-workflow)
 - [Debugging the System](#debugging-the-system)
@@ -231,58 +232,123 @@ for i, test in enumerate(test_cases):
 
 ## Benchmarking System
 
-### Basic Benchmarking
+### Unified Benchmarking Framework
 
-Run benchmarks through the CLI:
+The Problems-Kit now features a unified benchmarking system that standardizes benchmarking across different problem types. Run benchmarks using the command-line interface:
 
 ```bash
-python problems_kit.py
-# Select option 3 (Run Benchmark)
+python run_final_benchmark.py --problem-id p001_matrix_vector_dot
 ```
 
-Or directly from Python:
+The system supports various command-line options:
+
+```bash
+python run_final_benchmark.py --problem-id p002_sorting --sizes 1000,5000,10000 --config configs/custom_config.json
+```
+
+Or programmatically from Python:
 
 ```python
-from utils.bench_runner_enhanced import run_benchmark
+from utils.benchmark_unified import run_problem_benchmark
 
-run_benchmark(
+results = run_problem_benchmark(
     problem_id='p001_matrix_vector_dot',
-    implementations=[('python', 'v1'), ('python', 'v2_optimized')],
-    num_runs=10,
-    show_plots=True
+    config_path='configs/benchmarks/p001_matrix_vector_dot_benchmark_config.json'
 )
 ```
 
-### Advanced Benchmark Options
+### Configuration-Driven Benchmarks
 
-The benchmarking system supports many options:
+Benchmarks are now defined through JSON configuration files, making it easy to standardize and customize benchmark parameters:
+
+```json
+{
+    "problem_id": "p001_matrix_vector_dot",
+    "name": "Matrix-Vector Dot Product",
+    "description": "Benchmark for matrix-vector dot product implementations",
+    "implementations": [
+        ["python", "v1"],
+        ["python", "v2_optimized"],
+        ["cuda", "v1"],
+        ["triton", "v1"],
+        ["triton", "v2_optimized"]
+    ],
+    "input_sizes": [128, 256, 512, 1024, 2048, 4096],
+    "num_runs": 10,
+    "warmup_runs": 3,
+    "error_thresholds": {
+        "default": 0.0001,
+        "1024": 0.0002,
+        "2048": 0.0002,
+        "4096": 0.0005
+    },
+    "input_generator": "generate_matrix_vector_inputs",
+    "reference_impl": ["python", "v1"]
+}
+```
+
+### Input Generation System
+
+The system uses a modular input generation approach, allowing for standardized inputs across different problem types:
 
 ```python
-run_benchmark(
-    problem_id='p001_matrix_vector_dot',
-    implementations=[('python', 'v1'), ('python', 'v2_optimized')],
-    num_runs=10,               # Number of benchmark runs
-    warmup_runs=3,             # Warmup runs before measurement
-    input_sizes=[128, 512, 1024, 2048],  # Size scaling tests
-    show_plots=True,           # Show matplotlib plots
-    save_plots=True,           # Save plots to file
-    export_csv=True,           # Export results to CSV
-    track_memory=True,         # Track memory usage
-    filter_outliers=True       # Remove statistical outliers
+from utils.benchmark_generators import generate_matrix_vector_inputs, generate_sorting_inputs, generate_graph_inputs
+
+# Generate matrix-vector inputs of size 1024
+matrix, vector = generate_matrix_vector_inputs(1024)
+
+# Generate sorting inputs with different distributions
+array_to_sort = generate_sorting_inputs(10000, distribution='nearly_sorted')
+
+# Generate graph inputs with custom parameters
+graph_data = generate_graph_inputs(1000, edge_density=0.1, weighted=True, directed=True)
+```
+
+### Advanced Visualization Suite
+
+The enhanced visualization system provides comprehensive performance insights:
+
+```python
+from utils.enhanced_visualizations import generate_complete_visualization_suite
+
+# Generate complete visualization suite
+viz_files = generate_complete_visualization_suite(
+    results=benchmark_results,
+    output_dir="benchmarks/visualizations",
+    problem_id="p001_matrix_vector_dot",
+    generate_html=True  # Create interactive HTML dashboard
 )
 ```
 
-### CSV Export and Analysis
+Visualization capabilities include:
+- Performance comparison plots with error bars
+- Scaling analysis comparing to theoretical complexity bounds (O(n), O(n log n), O(n²))
+- Numerical accuracy verification and error reporting
+- Interactive HTML dashboards (when Plotly is available)
 
-Results are exported to CSV for further analysis in tools like Excel, Pandas, or R:
+### Data Export Options
+
+Benchmark results are automatically exported in multiple formats:
 
 ```
-benchmarks/csv/p001_matrix_vector_dot_benchmark_20250405_141234.csv
+# CSV format for tabular analysis
+benchmarks/csv/p001_matrix_vector_dot_benchmark_20250407_181517.csv
+
+# JSON format for programmatic processing
+benchmarks/json/p001_matrix_vector_dot_benchmark_20250407_181517.json
+
+# Visualization files
+benchmarks/visualizations/p001_matrix_vector_dot_performance_20250407_181517.png
+benchmarks/visualizations/p001_matrix_vector_dot_scaling_20250407_181517.png
+benchmarks/visualizations/p001_matrix_vector_dot_accuracy_20250407_181517.png
+benchmarks/visualizations/html/p001_matrix_vector_dot_dashboard_20250407_181517.html
 ```
 
-The CSV includes:
-- Implementation details
-- Mean, median, min, max execution times
+The exports include comprehensive data:
+- Implementation details and input sizes
+- Timing statistics (mean, median, min, max, std)
+- Numerical accuracy and error thresholds
+- Scaling factors relative to baseline sizes
 - Standard deviation and confidence intervals
 - Memory usage metrics (if tracked)
 - Throughput measurements (if calculated)

@@ -48,7 +48,9 @@ This document provides a step-by-step routine for solving problems using the Pro
    except ImportError:
        CUDA_AVAILABLE = False
    
-   def generate_inputs(size=1000):
+   # The input generation can now be handled by utils.benchmark_generators
+   # This function should match the name specified in your benchmark config
+   def generate_problem_specific_inputs(size=1000):
        """
        Generate input data for benchmarking.
        
@@ -149,17 +151,30 @@ This document provides a step-by-step routine for solving problems using the Pro
 
 ### Step 6: Benchmark Your Baseline Solution
 
-1. Use the run_python_implementations.py script (for Python-only comparison):
-   ```bash
-   python run_python_implementations.py
+1. Create a benchmark configuration file in `configs/benchmarks/pXXX_problem_name_benchmark_config.json`:
+   ```json
+   {
+       "problem_id": "pXXX_problem_name",
+       "name": "Problem Description",
+       "description": "Benchmark for baseline implementation",
+       "implementations": [
+           ["python", "v1"]
+       ],
+       "input_sizes": [128, 256, 512, 1024, 2048],
+       "num_runs": 10,
+       "warmup_runs": 3,
+       "error_thresholds": {
+           "default": 0.0001
+       }
+   }
    ```
 
-2. Or use the benchmark example script:
+2. Run the unified benchmarking system:
    ```bash
-   python run_benchmark_example.py
+   python run_final_benchmark.py --problem-id pXXX_problem_name
    ```
 
-3. Note the performance metrics as your baseline
+3. Review the generated performance metrics and visualizations in the `benchmarks/` directory
 
 ## Optimization Phase
 
@@ -210,37 +225,57 @@ This document provides a step-by-step routine for solving problems using the Pro
 
 1. Verify correctness:
    ```bash
-   python test_implementation.py
+   python test_implementation.py --problem_id pXXX_problem_name --implementation python.v2_optimized
    ```
 
-2. Run benchmarks to compare v1 and v2:
+2. Update your benchmark configuration to include both implementations:
+   ```json
+   {
+       "problem_id": "pXXX_problem_name",
+       "name": "Problem Description",
+       "description": "Benchmark comparing baseline and optimized implementations",
+       "implementations": [
+           ["python", "v1"],
+           ["python", "v2_optimized"]
+       ],
+       "input_sizes": [128, 256, 512, 1024, 2048, 4096],
+       "num_runs": 10,
+       "warmup_runs": 3,
+       "error_thresholds": {
+           "default": 0.0001
+       }
+   }
+   ```
+
+3. Run the unified benchmarking system:
    ```bash
-   python run_benchmark_example.py
+   python run_final_benchmark.py --problem-id pXXX_problem_name
    ```
 
-3. Or create a custom benchmark script:
+4. Alternatively, use the API directly in a custom script:
    ```python
-   # Example custom benchmark script
-   import numpy as np
-   from utils.bench_runner_enhanced import run_benchmark
-   from utils.path_manager import ensure_directories_exist
+   # Example custom benchmark script using unified system
+   import os
+   from utils.benchmark_unified import run_problem_benchmark
+   from utils.enhanced_visualizations import generate_complete_visualization_suite
    
    def main():
-       # Ensure all needed directories exist
-       ensure_directories_exist()
+       # Define problem ID
+       problem_id = "pXXX_problem_name"
        
-       # Run with multiple input sizes to show scaling performance
-       input_sizes = [128, 512, 1024, 2048]
+       # Run benchmark using configuration file
+       print("Running benchmark...")
+       results = run_problem_benchmark(
+           problem_id=problem_id,
+           config_path=f"configs/benchmarks/{problem_id}_benchmark_config.json"
+       )
        
-       run_benchmark(
-           problem_id='pXXX_problem_name',
-           implementations=[('python', 'v1'), ('python', 'v2_optimized')], 
-           num_runs=5,
-           warmup_runs=2,
-           input_sizes=input_sizes,
-           show_plots=True,
-           export_csv=True,
-           track_memory=True
+       # Generate enhanced visualizations
+       viz_files = generate_complete_visualization_suite(
+           results=results,
+           output_dir="benchmarks/visualizations",
+           problem_id=problem_id,
+           generate_html=True
        )
        
    if __name__ == "__main__":
@@ -256,9 +291,15 @@ This document provides a step-by-step routine for solving problems using the Pro
 1. Document key findings in your code:
    - Performance bottlenecks identified
    - Optimization techniques used
-   - Percentage improvements
+   - Percentage improvements 
 
-2. Update IMPLEMENTATION_METADATA with actual performance data
+2. Use the visualization outputs from the unified benchmarking system:
+   - Review the performance comparison plots (`problem_id_performance_timestamp.png`)
+   - Analyze the scaling behavior plots (`problem_id_scaling_timestamp.png`)
+   - Check the numerical accuracy plots if applicable (`problem_id_accuracy_timestamp.png`)
+   - Explore the interactive HTML dashboard for detailed insights (`problem_id_dashboard_timestamp.html`)
+
+3. Update IMPLEMENTATION_METADATA with actual performance data
 
 ### Step 10: Update Problems Tracking
 
@@ -600,67 +641,98 @@ When you're ready to implement GPU versions on your main PC, follow these struct
 
 ### Step 14: Comprehensive Benchmarking
 
-1. Run a comprehensive benchmark comparing all implementations:
-   ```bash
-   python run_benchmark_example.py
+1. Create a final benchmark configuration that includes all implementations:
+   ```json
+   {
+       "problem_id": "pXXX_problem_name",
+       "name": "Problem Description",
+       "description": "Comprehensive benchmark comparing all implementations",
+       "implementations": [
+           ["python", "v1"],
+           ["python", "v2_optimized"],
+           ["cuda", "v1"],
+           ["cuda", "v2_optimized"],
+           ["triton", "v1"],
+           ["triton", "v2_optimized"]
+       ],
+       "input_sizes": [128, 256, 512, 1024, 2048, 4096, 8192],
+       "num_runs": 10,
+       "warmup_runs": 3,
+       "error_thresholds": {
+           "default": 0.0001,
+           "1024": 0.0002,
+           "2048": 0.0002,
+           "4096": 0.0005,
+           "8192": 0.001
+       }
+   }
    ```
 
-2. Create a GPU-specific benchmark script:
+2. Run the unified benchmarking system:
+   ```bash
+   python run_final_benchmark.py --problem-id pXXX_problem_name
+   ```
+
+3. For advanced GPU benchmarking scenarios, create a custom script:
    ```python
-   # Example: gpu_benchmark.py
-   import numpy as np
-   from utils.bench_runner_enhanced import run_benchmark
-   from utils.path_manager import ensure_directories_exist
+   # Example: advanced_gpu_benchmark.py
+   import os
+   from datetime import datetime
+   from utils.benchmark_unified import run_problem_benchmark
+   from utils.enhanced_visualizations import generate_complete_visualization_suite
    
    def main():
-       # Ensure all needed directories exist
-       ensure_directories_exist()
+       # Define problem ID
+       problem_id = "pXXX_problem_name"
+       config_path = f"configs/benchmarks/{problem_id}_benchmark_config.json"
        
-       # Run benchmark comparing all implementations
-       print("Running comprehensive GPU benchmark...")
-       
-       # Include larger input sizes for GPU benefit demonstration
-       input_sizes = [128, 512, 1024, 4096, 8192]
-       
-       # Only include implementations that exist
-       from utils.bench_runner_enhanced import check_implementation
-       
-       implementations = []
-       # Add Python implementations
-       if check_implementation('pXXX_problem_name', 'python', 'v1'):
-           implementations.append(('python', 'v1'))
-       if check_implementation('pXXX_problem_name', 'python', 'v2_optimized'):
-           implementations.append(('python', 'v2_optimized'))
-       
-       # Add Triton implementations if available
-       if check_implementation('pXXX_problem_name', 'triton', 'v1'):
-           implementations.append(('triton', 'v1'))
-       if check_implementation('pXXX_problem_name', 'triton', 'v2_optimized'):
-           implementations.append(('triton', 'v2_optimized'))
-       
-       # Add CUDA implementations if available
-       if check_implementation('pXXX_problem_name', 'cuda', 'v1'):
-           implementations.append(('cuda', 'v1'))
-       if check_implementation('pXXX_problem_name', 'cuda', 'v2_optimized'):
-           implementations.append(('cuda', 'v2_optimized'))
-       
-       run_benchmark(
-           problem_id='pXXX_problem_name',
-           implementations=implementations, 
-           num_runs=5,
-           warmup_runs=2,
-           input_sizes=input_sizes,
-           show_plots=True,
-           save_plots=True,
-           export_csv=True,
-           track_memory=True
+       print("Running preliminary validation test...")
+       # First run on small sizes to verify correctness
+       validation_results = run_problem_benchmark(
+           problem_id=problem_id,
+           config_path=config_path,
+           input_sizes=[16, 32, 64]  # Small sizes for validation
        )
        
-       print("GPU benchmark complete!")
+       # Check if all implementations passed validation
+       all_passed = all(result.passed for result in validation_results)
+       if not all_passed:
+           print("Warning: Some implementations failed validation!")
+           for result in validation_results:
+               if not result.passed:
+                   print(f"  Failed: {result.implementation_type} ({result.variant}) - Error: {result.error}")
+       
+       print("\nRunning comprehensive GPU benchmark...")
+       # Run full benchmark with specified sizes
+       timestamp = datetime.now().strftime('%Y%m%d_%H%M%S')
+       results = run_problem_benchmark(
+           problem_id=problem_id,
+           config_path=config_path
+       )
+       
+       # Generate enhanced visualizations
+       viz_dir = f"benchmarks/visualizations/{problem_id}_comprehensive_{timestamp}"
+       os.makedirs(viz_dir, exist_ok=True)
+       
+       viz_files = generate_complete_visualization_suite(
+           results=results,
+           output_dir=viz_dir,
+           problem_id=problem_id,
+           generate_html=True
+       )
+       
+       print("\nComprehensive GPU benchmark complete!")
+       print(f"Results saved to: {viz_dir}")
    
    if __name__ == "__main__":
        main()
    ```
+
+4. Examine the visualization outputs to gain insights:
+   - Performance comparison plots show relative speeds across implementations
+   - Scaling analysis reveals how each implementation scales with input size
+   - Accuracy comparison helps verify numerical stability of GPU implementations
+   - Interactive HTML dashboards provide detailed views of all metrics
 
 ## Troubleshooting
 

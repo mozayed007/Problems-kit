@@ -1,0 +1,47 @@
+{
+  "problem_id": "p001_matrix_vector_dot",
+  "name": "P001 Matrix Vector Dot",
+  "description": "Benchmark configuration for P001 Matrix Vector Dot",
+  "implementations": [
+    [
+      "python",
+      "v1"
+    ],
+    [
+      "python",
+      "v2_optimized"
+    ],
+    [
+      "cuda",
+      "v1"
+    ],
+    [
+      "triton",
+      "v1"
+    ],
+    [
+      "triton",
+      "v2_optimized"
+    ]
+  ],
+  "input_sizes": [
+    128,
+    256,
+    512,
+    1024,
+    2048,
+    4096
+  ],
+  "num_runs": 10,
+  "warmup_runs": 3,
+  "error_thresholds": {
+    "128": 0.0001,
+    "256": 0.0001,
+    "512": 0.0001,
+    "1024": 0.0002,
+    "2048": 0.0002,
+    "4096": 0.0005
+  },
+  "input_generator_function": "generate_inputs",
+  "reference_function": "solution"
+}

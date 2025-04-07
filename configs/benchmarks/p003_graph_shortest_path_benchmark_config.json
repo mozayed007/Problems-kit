@@ -1,0 +1,20 @@
+{
+    "problem_id": "p003_graph_shortest_path",
+    "name": "Graph Shortest Path Algorithms",
+    "description": "Benchmark for various graph shortest path algorithm implementations",
+    "implementations": [
+        ["python", "v1_dijkstra"],
+        ["python", "v2_optimized_dijkstra"],
+        ["python", "v3_bellman_ford"],
+        ["cuda", "v1_parallel_dijkstra"],
+        ["cuda", "v2_optimized"]
+    ],
+    "input_sizes": [100, 500, 1000, 5000, 10000, 20000],
+    "num_runs": 5,
+    "warmup_runs": 2,
+    "error_thresholds": {
+        "default": 0.0
+    },
+    "input_generator": "generate_graph_inputs",
+    "reference_impl": ["python", "v1_dijkstra"]
+}

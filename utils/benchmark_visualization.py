@@ -312,8 +312,12 @@ def plot_size_comparison(results: Dict[Tuple[str, str, int], BenchmarkResult],
     # Plot line for each implementation
     for (impl_type, variant), size_results in implementations.items():
         # Get implementation metadata name if available
-        metadata = next(iter(size_results.values())).metadata.get('impl_metadata', {})
-        name = metadata.get('name', f"{impl_type.capitalize()} {variant}")
+        try:
+            first_result = next(iter(size_results.values()))
+            metadata = first_result.metadata.get('impl_metadata', {}) if first_result.metadata else {}
+            name = metadata.get('name', f"{impl_type.capitalize()} {variant}")
+        except (StopIteration, AttributeError):
+            name = f"{impl_type.capitalize()} {variant}"
         impl_name = f"{name} ({impl_type})"
         
         # Sort sizes to ensure proper ordering

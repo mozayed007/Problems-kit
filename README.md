@@ -21,13 +21,20 @@ The repository is organized to facilitate algorithmic problem-solving, performan
 
 - **Multi-Platform Support**: Implement solutions in pure Python, Triton (GPU), and CUDA
 - **Multiple Implementation Variants**: Create and compare different optimization approaches
-- **Enhanced Benchmarking System**: Detailed performance metrics including:
-  - Execution timing (mean, median, min, max, std)
-  - Memory usage tracking
-  - Performance scaling with input size
-  - Outlier detection and filtering
-- **Rich Visualization**: Generate charts for performance comparison
-- **CSV Export**: Export benchmark results for further analysis
+- **Unified Benchmarking System**: Configuration-driven performance testing with:
+  - Standardized result formats and error handling
+  - Adaptive error thresholds based on problem size
+  - Support for multiple problem types through modular design
+  - Consistent reporting and visualization interface
+- **Advanced Visualizations**: Comprehensive analysis through:
+  - Performance comparison plots with error bars
+  - Complexity scaling analysis with theoretical bounds
+  - Numerical accuracy verification and error reporting
+  - Interactive HTML dashboards (with Plotly support)
+- **Data Export**: Multiple export formats for further analysis:
+  - CSV output with detailed statistics
+  - JSON format for programmatic processing
+  - PNG charts for documentation
 - **Command-Line Interface**: User-friendly menu system for navigation
 - **Comprehensive Test Suite**: Verify implementation correctness
 
@@ -49,6 +56,20 @@ The repository is organized to facilitate algorithmic problem-solving, performan
 1. Clone the repository:
    ```bash
    git clone <repository-url>
+   cd Problems-kit
+   ```
+
+2. Install required dependencies:
+   ```bash
+   pip install -r requirements.txt
+   ```
+
+3. Run a benchmark for a specific problem:
+   ```bash
+   python run_final_benchmark.py --problem-id p001_matrix_vector_dot
+   ```
+
+4. View benchmark results in the `benchmarks/` directory
    cd Problems-kit
    ```
 
@@ -119,7 +140,12 @@ Problems-kit/
 │
 ├── benchmarks/                      # Benchmark results (automatically created)
 │   ├── csv/                         # CSV exports of benchmark results
+│   ├── json/                        # JSON exports of benchmark results 
 │   └── visualizations/              # Generated plots and visualization files
+│       └── html/                    # Interactive HTML dashboards
+│
+├── configs/                         # Configuration files
+│   └── benchmarks/                  # Benchmark configuration files
 │
 └── tests/                           # Test cases for solutions
     └── test_implementations.py      # Test suite for verifying implementations

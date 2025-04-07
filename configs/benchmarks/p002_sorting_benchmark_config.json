@@ -1,0 +1,21 @@
+{
+    "problem_id": "p002_sorting",
+    "name": "Sorting Algorithms",
+    "description": "Benchmark for various sorting algorithm implementations",
+    "implementations": [
+        ["python", "v1_bubble"],
+        ["python", "v2_quick"],
+        ["python", "v3_merge"],
+        ["python", "v4_tim"],
+        ["cuda", "v1_radix"],
+        ["cuda", "v2_bitonic"]
+    ],
+    "input_sizes": [1000, 5000, 10000, 50000, 100000, 500000],
+    "num_runs": 10,
+    "warmup_runs": 3,
+    "error_thresholds": {
+        "default": 0.0
+    },
+    "input_generator": "generate_sorting_inputs",
+    "reference_impl": ["python", "v4_tim"]
+}

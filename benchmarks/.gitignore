@@ -1,0 +1,8 @@
+# Ignore benchmark result files but keep directory structure
+*.csv
+*.json
+*.png
+*.html
+
+# But keep the directory structure
+!.gitkeep
