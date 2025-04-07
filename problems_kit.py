@@ -35,18 +35,30 @@ except ImportError:
     print("Warning: Could not import categories module. Some features may be limited.")
     CATEGORIES_LOADED = False
 
-# Import enhanced benchmark modules - now these are the only ones we use
+# Import unified benchmarking system modules
 try:
-    from utils.bench_runner_enhanced import run_benchmark, check_implementation, list_implementations
-    from utils.benchmark_visualization import export_to_csv, visualize_benchmark_results
+    # Import the modules and compatibility wrapper
+    from utils.bench_runner_enhanced import check_implementation, list_implementations
     from utils.path_manager import ensure_directories_exist
+    from utils.compat_wrappers import run_benchmark
+    
+    # Also import the new unified benchmarking system components
+    from utils.benchmark_unified import run_problem_benchmark
+    from utils.benchmark_config import BenchmarkConfig
+    from utils.enhanced_visualizations import (
+        create_performance_plot,
+        create_scaling_analysis_plot,
+        create_accuracy_comparison_plot,
+        generate_complete_visualization_suite
+    )
     
     # Ensure directories exist
     ensure_directories_exist()
     
     ENHANCED_BENCH_LOADED = True
-except ImportError:
-    print("Warning: Could not import enhanced benchmarking modules. Benchmarking will not be available.")
+except ImportError as e:
+    print(f"Warning: Could not import benchmarking modules: {e}")
+    print("Benchmarking will not be available.")
     ENHANCED_BENCH_LOADED = False
 
 try:
@@ -852,7 +864,9 @@ def run_benchmark_for_problem(problem_id: str):
     print(f"Input sizes: {input_sizes}")
     
     try:
-        # Run the benchmark
+        # Run the benchmark using our compatibility wrapper
+        # This automatically uses the unified benchmarking system under the hood
+        print("\nRunning benchmark...")
         run_benchmark(
             problem_id=problem_id,
             implementations=implementations_to_bench,
