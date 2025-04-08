@@ -15,7 +15,7 @@ from pathlib import Path
 from typing import Dict, List, Tuple, Any, Optional
 
 # Add the root directory to the path to ensure imports work
-sys.path.append('/teamspace/studios/this_studio/Problems-kit')
+sys.path.append(str(Path(__file__).parent))
 
 # Import the unified benchmarking system
 from utils.benchmark_unified import (
