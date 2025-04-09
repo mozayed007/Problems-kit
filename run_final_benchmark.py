@@ -71,6 +71,7 @@ def plot_benchmark_summary(results: List[BenchmarkResult], save_path: Optional[s
     # Extract unique implementations and sizes
     implementations = set()
     sizes = sorted(by_size.keys())
+    unique_sizes = sizes  # Define unique_sizes here
     
     for result in results:
         implementations.add(f"{result.implementation_type} ({result.variant})")

@@ -251,7 +251,7 @@ def generate_custom_inputs(size: int, problem_type: str) -> Any:
     elif "matrix" in problem_type and "matrix" in problem_type:
         return generate_matrix_matrix_inputs(size)
     elif "sort" in problem_type:
-        return generate_sort_inputs(size)
+        return generate_sorting_inputs(size)
     elif "conv" in problem_type:
         return generate_convolution_inputs(size)
     elif "graph" in problem_type:

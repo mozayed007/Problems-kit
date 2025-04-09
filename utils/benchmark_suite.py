@@ -233,17 +233,17 @@ class BenchmarkSuite:
             raise ImportError(f"Could not import {impl_type} implementation variant '{variant}': {e}")
     
     def benchmark_implementation(self, 
-                               impl_type: str,
-                               variant: str = 'v1',
-                               function_name: str = 'solution',
-                               args: List[Any] = None,
-                               kwargs: Dict[str, Any] = None,
-                               num_runs: int = 10,
-                               warmup_runs: int = 3,
-                               track_memory: bool = True,
-                               calculate_throughput: bool = True,
-                               operation_count: Optional[int] = None,
-                               input_sizes: Optional[List[int]] = None) -> BenchmarkResult:
+                                impl_type: str,
+                                variant: str = 'v1',
+                                function_name: str = 'solution',
+                                args: List[Any] = None,
+                                kwargs: Dict[str, Any] = None,
+                                num_runs: int = 10,
+                                warmup_runs: int = 3,
+                                track_memory: bool = True,
+                                calculate_throughput: bool = True,
+                                operation_count: Optional[int] = None,
+                                input_sizes: Optional[List[int]] = None) -> BenchmarkResult:
         """
         Benchmark a specific implementation variant.
         

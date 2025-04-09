@@ -209,6 +209,18 @@ extern "C" void solution_launcher(float* h_arg1, float* h_arg2, float* h_output,
     cudaFree(d_output);
 }}
 
+// Benchmark integration wrapper for unified benchmarking system
+extern "C" float* cuda_benchmark_wrapper(float* h_arg1, float* h_arg2, int n) {{
+    float* h_output = (float*)malloc(n * sizeof(float));
+    if (!h_output) {{
+        printf("Error: Could not allocate host memory for output\\n");
+        return NULL;
+    }}
+    
+    solution_launcher(h_arg1, h_arg2, h_output, n);
+    return h_output;
+}}
+
 /*
 To compile this file:
 nvcc -o solution.o -c solution_cuda.cu -arch=sm_XX

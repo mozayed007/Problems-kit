@@ -285,41 +285,31 @@ def generate_categories_file() -> Path:
 
 def initialize_example_problem(group_id: str = "group_01_linear_algebra", problem_number: int = 1) -> Path:
     """
-    Initialize an example problem with templates for Python, Triton, and CUDA.
+    Initialize an example problem with the specified group ID and problem number.
     
     Args:
-        group_id: ID of the group to add the problem to
-        problem_number: Number of the problem to initialize
+        group_id: ID of the group (e.g., "group_01_linear_algebra")
+        problem_number: Problem number
         
     Returns:
         Path to the created problem directory
     """
-    from solution_template import create_problem_structure
+    # Import necessary function
+    from utils.solution_template import create_problem_structure
     
-    # Parse problems file
-    parsed_data = parse_problems_file()
+    # Create problem ID and information
+    problem_id = f"p{problem_number:03d}_example_problem"
+    problem_info = {
+        'title': f"Example Problem {problem_number}",
+        'description': f"This is an example problem #{problem_number} for demonstration purposes."
+    }
     
-    # Find the problem info
-    problem_info = None
-    for group in parsed_data['groups']:
-        if group['id'] == group_id:
-            for problem in group['problems']:
-                if problem.get('id') == problem_number:
-                    problem_info = problem
-                    break
-    
-    if problem_info is None:
-        raise ValueError(f"Problem {problem_number} not found in group {group_id}")
-    
-    # Create problem ID
-    problem_id = create_problem_id(problem_info)
-    
-    # Create problem structure
+    # Create the problem structure
     problem_dir = create_problem_structure(
         problem_id=problem_id,
         group=group_id,
         problem_title=problem_info['title'],
-        problem_description=f"Implementation of {problem_info['title']}",
+        problem_description=problem_info['description'],
         implementations=['python', 'triton', 'cuda']
     )
     

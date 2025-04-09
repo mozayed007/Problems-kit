@@ -6,15 +6,14 @@
 Each challenge entry lists:
 
 - **ID / Title**
-    
+
 - **Difficulty**
-    
+
 - **Category**
-    
+
 - **Platform** (DeepML or LeetGPU)
-    
+
 - Checkboxes for **Python**, **Triton**, and **CUDA** implementations
-    
 
 ---
 
@@ -23,13 +22,12 @@ Each challenge entry lists:
 **Prerequisites (Review):**
 
 - Basic vector/matrix operations (addition, multiplication, dot product)
-    
+
 - Matrix transposition, reshaping
-    
+
 - Introductory statistics (mean, covariance)
-    
+
 - Fundamental ML concepts (linear regression basics)
-    
 
 **Unified Checklist:**
 
@@ -59,17 +57,16 @@ Each challenge entry lists:
 **Schedule (Days 1–2):**
 
 - **Day 1:**
-    
-    - _Hour 1:_ Quick review of basic linear algebra (vectors, matrices).
-        
-    - _Hours 2–4:_ Implement DeepML problems 1–5.
-        
+
+  - _Hour 1:_ Quick review of basic linear algebra (vectors, matrices).
+
+  - _Hours 2–4:_ Implement DeepML problems 1–5.
+
 - **Day 2:**
-    
-    - _Hour 1:_ Brief review of mean, covariance, and linear regression basics.
-        
-    - _Hours 2–4:_ Implement DeepML problems 10, 14, 15, 16, 22, 23, 24, 27, 29, 30; then implement LeetGPU Vector Addition, Matrix Multiplication, Matrix Transpose, Reverse Array, and Dot Product.
-        
+
+  - _Hour 1:_ Brief review of mean, covariance, and linear regression basics.
+
+  - _Hours 2–4:_ Implement DeepML problems 10, 14, 15, 16, 22, 23, 24, 27, 29, 30; then implement LeetGPU Vector Addition, Matrix Multiplication, Matrix Transpose, Reverse Array, and Dot Product.
 
 ---
 
@@ -78,11 +75,10 @@ Each challenge entry lists:
 **Prerequisites (Review):**
 
 - Data manipulation (one‑hot encoding, converting vectors to diagonal matrices)
-    
+
 - Basic performance metrics (accuracy, precision, recall, F‑score)
-    
+
 - Activation function basics (sigmoid, softmax, ReLU variants)
-    
 
 **Unified Checklist:**
 
@@ -109,17 +105,16 @@ Each challenge entry lists:
 **Schedule (Days 3–4):**
 
 - **Day 3:**
-    
-    - _Hour 1:_ Review one‑hot encoding and basic data transformation techniques.
-        
-    - _Hours 2–4:_ Implement DeepML problems 34, 35, 36, and 39, 42, 43, 44.
-        
+
+  - _Hour 1:_ Review one‑hot encoding and basic data transformation techniques.
+
+  - _Hours 2–4:_ Implement DeepML problems 34, 35, 36, and 39, 42, 43, 44.
+
 - **Day 4:**
-    
-    - _Hour 1:_ Briefly revisit performance metrics (accuracy, precision, etc.).
-        
-    - _Hours 2–4:_ Implement DeepML problems 45, 46, 52, 56, 61, 64, 65, 66; then implement LeetGPU Softmax and ReLU Activation.
-        
+
+  - _Hour 1:_ Briefly revisit performance metrics (accuracy, precision, etc.).
+
+  - _Hours 2–4:_ Implement DeepML problems 45, 46, 52, 56, 61, 64, 65, 66; then implement LeetGPU Softmax and ReLU Activation.
 
 ---
 
@@ -128,11 +123,10 @@ Each challenge entry lists:
 **Prerequisites (Review):**
 
 - Descriptive statistics and probability distributions
-    
+
 - Evaluation metrics for classification and regression
-    
+
 - Sparse data representations
-    
 
 **Unified Checklist:**
 
@@ -161,17 +155,16 @@ Each challenge entry lists:
 **Schedule (Days 5–6):**
 
 - **Day 5:**
-    
-    - _Hour 1:_ Quick review of key statistical concepts and probability distributions.
-        
-    - _Hours 2–4:_ Implement DeepML problems 67, 69, 70, 71, 72, 73, and 75.
-        
+
+  - _Hour 1:_ Quick review of key statistical concepts and probability distributions.
+
+  - _Hours 2–4:_ Implement DeepML problems 67, 69, 70, 71, 72, 73, and 75.
+
 - **Day 6:**
-    
-    - _Hour 1:_ Review similarity measures and vector operations.
-        
-    - _Hours 2–4:_ Complete DeepML problems 76, 78, 81, 82, 83, 84, 86, and 91; then implement LeetGPU Histogramming, Sorting, Prefix Sum, and Sparse Matrix‑Vector Multiplication.
-        
+
+  - _Hour 1:_ Review similarity measures and vector operations.
+
+  - _Hours 2–4:_ Complete DeepML problems 76, 78, 81, 82, 83, 84, 86, and 91; then implement LeetGPU Histogramming, Sorting, Prefix Sum, and Sparse Matrix‑Vector Multiplication.
 
 ---
 
@@ -180,11 +173,10 @@ Each challenge entry lists:
 **Prerequisites (Review):**
 
 - Advanced activation functions (ELU, PReLU, Softplus, Softsign, Swish, SELU)
-    
+
 - Normalization techniques (min‑max, batch normalization)
-    
+
 - Neural network building blocks (residual blocks, global average pooling)
-    
 
 **Unified Checklist:**
 
@@ -212,17 +204,16 @@ Each challenge entry lists:
 **Schedule (Days 7–8):**
 
 - **Day 7:**
-    
-    - _Hour 1:_ Review advanced activations and normalization techniques.
-        
-    - _Hours 2–4:_ Implement DeepML problems 93, 95, 96, 97, 98, 99, and 100.
-        
+
+  - _Hour 1:_ Review advanced activations and normalization techniques.
+
+  - _Hours 2–4:_ Implement DeepML problems 93, 95, 96, 97, 98, 99, and 100.
+
 - **Day 8:**
-    
-    - _Hour 1:_ Brief review of residual block architectures and pooling.
-        
-    - _Hours 2–4:_ Implement DeepML problems 102, 103, 104, 108, 112, 113, 114, 115; then implement LeetGPU challenges 1D Convolution, Color Inversion, and 2D Convolution.
-        
+
+  - _Hour 1:_ Brief review of residual block architectures and pooling.
+
+  - _Hours 2–4:_ Implement DeepML problems 102, 103, 104, 108, 112, 113, 114, 115; then implement LeetGPU challenges 1D Convolution, Color Inversion, and 2D Convolution.
 
 ---
 
@@ -231,13 +222,12 @@ Each challenge entry lists:
 **Prerequisites (Review):**
 
 - Advanced linear algebra (SVD, eigenvalues, determinants, cross product)
-    
+
 - Numerical optimization methods (gradient descent, conjugate gradient)
-    
+
 - Advanced ML topics (decision trees, SVM, AdaBoost)
-    
+
 - Custom NN components (dense layers, RNNs, positional encoding)
-    
 
 **Unified Checklist:**
 
@@ -263,17 +253,16 @@ Each challenge entry lists:
 **Schedule (Days 9–10):**
 
 - **Day 9:**
-    
-    - _Hour 1:_ Quick review of advanced linear algebra topics (SVD, determinants).
-        
-    - _Hours 2–4:_ Implement DeepML problems 116, 118, 12, and 13.
-        
+
+  - _Hour 1:_ Quick review of advanced linear algebra topics (SVD, determinants).
+
+  - _Hours 2–4:_ Implement DeepML problems 116, 118, 12, and 13.
+
 - **Day 10:**
-    
-    - _Hour 1:_ Refresh advanced ML methods and optimization techniques.
-        
-    - _Hours 2–4:_ Implement DeepML problems 20, 21, 28, 38, 40, 62, 63, 85, 88, 94, 101; then implement LeetGPU GEMM (FP16).
-        
+
+  - _Hour 1:_ Refresh advanced ML methods and optimization techniques.
+
+  - _Hours 2–4:_ Implement DeepML problems 20, 21, 28, 38, 40, 62, 63, 85, 88, 94, 101; then implement LeetGPU GEMM (FP16).
 
 ---
 
@@ -282,13 +271,12 @@ Each challenge entry lists:
 **Prerequisites (Review):**
 
 - Intermediate linear algebra (matrix inversion, solving equations)
-    
+
 - Iterative methods (Jacobi, Gauss‑Seidel)
-    
+
 - Core ML operations (k‑means, cross‑validation, PCA)
-    
+
 - Basic neural network fundamentals
-    
 
 **Unified Checklist:**
 
@@ -314,17 +302,16 @@ Each challenge entry lists:
 **Schedule (Days 11–12):**
 
 - **Day 11:**
-    
-    - _Hour 1:_ Review intermediate linear algebra and iterative methods.
-        
-    - _Hours 2–4:_ Implement DeepML problems 105, 106, 6, 7, 8, 9, 11, 17, and 18.
-        
+
+  - _Hour 1:_ Review intermediate linear algebra and iterative methods.
+
+  - _Hours 2–4:_ Implement DeepML problems 105, 106, 6, 7, 8, 9, 11, 17, and 18.
+
 - **Day 12:**
-    
-    - _Hour 1:_ Quick refresher on PCA and autograd fundamentals.
-        
-    - _Hours 2–4:_ Complete DeepML problems 19, 25, 26, 31, 32, and 33; then implement LeetGPU K‑Means Clustering.
-        
+
+  - _Hour 1:_ Quick refresher on PCA and autograd fundamentals.
+
+  - _Hours 2–4:_ Complete DeepML problems 19, 25, 26, 31, 32, and 33; then implement LeetGPU K‑Means Clustering.
 
 ---
 
@@ -333,11 +320,10 @@ Each challenge entry lists:
 **Prerequisites (Review):**
 
 - Intermediate deep learning (RNNs, LSTM, self‑attention)
-    
+
 - Advanced matrix techniques (RREF, gradient descent variants)
-    
+
 - Basic NLP methods
-    
 
 **Unified Checklist:**
 
@@ -363,17 +349,16 @@ Each challenge entry lists:
 **Schedule (Days 13–14):**
 
 - **Day 13:**
-    
-    - _Hour 1:_ Review fundamentals of RNNs, LSTM, and self‑attention.
-        
-    - _Hours 2–4:_ Implement DeepML problems 37, 41, 47, 48, 49, 50, and 51.
-        
+
+  - _Hour 1:_ Review fundamentals of RNNs, LSTM, and self‑attention.
+
+  - _Hours 2–4:_ Implement DeepML problems 37, 41, 47, 48, 49, 50, and 51.
+
 - **Day 14:**
-    
-    - _Hour 1:_ Refresh optimization techniques and basic NLP methods.
-        
-    - _Hours 2–4:_ Implement DeepML problems 53, 54, 55, 57, 58, 59, 60, 68; then implement LeetGPU Multi‑Head Self‑Attention.
-        
+
+  - _Hour 1:_ Refresh optimization techniques and basic NLP methods.
+
+  - _Hours 2–4:_ Implement DeepML problems 53, 54, 55, 57, 58, 59, 60, 68; then implement LeetGPU Multi‑Head Self‑Attention.
 
 ---
 
@@ -382,11 +367,10 @@ Each challenge entry lists:
 **Prerequisites (Review):**
 
 - Fundamental NLP concepts (BM25, METEOR, PMI)
-    
+
 - Specialized metrics and composite vector techniques
-    
+
 - Advanced linear algebra (composite hypervectors, orthonormal bases)
-    
 
 **Unified Checklist:**
 
@@ -412,27 +396,25 @@ Each challenge entry lists:
 **Schedule (Days 15–16):**
 
 - **Day 15:**
-    
-    - _Hour 1:_ Quick review of NLP ranking, specialized metrics, and composite vector techniques.
-        
-    - _Hours 2–4:_ Implement DeepML problems 74, 77, 79, 80, 87, 89, 90, 92, 107, and 109.
-        
+
+  - _Hour 1:_ Quick review of NLP ranking, specialized metrics, and composite vector techniques.
+
+  - _Hours 2–4:_ Implement DeepML problems 74, 77, 79, 80, 87, 89, 90, 92, 107, and 109.
+
 - **Day 16:**
-    
-    - _Hour 1:_ Brief review of translation metrics and pointwise mutual information.
-        
-    - _Hours 2–4:_ Complete DeepML problems 110, 111, 117, and 119; then implement LeetGPU challenges 3D Convolution and Swarm Intelligence & Flocking Simulation.
-        
+
+  - _Hour 1:_ Brief review of translation metrics and pointwise mutual information.
+
+  - _Hours 2–4:_ Complete DeepML problems 110, 111, 117, and 119; then implement LeetGPU challenges 3D Convolution and Swarm Intelligence & Flocking Simulation.
 
 ---
 
 ## Additional Recommendations
 
 - **Daily Progress:** Update the unified checklist as you complete each challenge in Python, Triton, and CUDA.
-    
+
 - **Weekly Review:** At the end of every 2-day block (each group), spend 15 minutes reviewing challenging topics and refining your notes.
-    
+
 - **Flexibility:** Adjust the schedule if some topics or challenges require extra review or debugging time.
-    
+
 - **Documentation:** Keep a brief journal to record insights, optimization techniques, and any issues for future reference.
-    
