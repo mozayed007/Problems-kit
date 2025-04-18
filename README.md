@@ -54,17 +54,20 @@ The repository is organized to facilitate algorithmic problem-solving, performan
 ### Quick Start
 
 1. Clone the repository:
+
    ```bash
    git clone <repository-url>
    cd Problems-kit
    ```
 
 2. Install required dependencies:
+
    ```bash
    pip install -r requirements.txt
    ```
 
 3. Run a benchmark for a specific problem:
+
    ```bash
    python run_final_benchmark.py --problem-id p001_matrix_vector_dot
    ```
@@ -74,28 +77,32 @@ The repository is organized to facilitate algorithmic problem-solving, performan
 ### Alternative Workflows
 
 1. Run the CLI interface:
+
    ```bash
    python problems_kit.py
    ```
 
 2. For testing implementations across platforms:
+
    ```bash
    python test_implementations.py
    ```
 
 3. For individual testing of implementations:
+
    ```bash
    python -c "import sys; sys.path.insert(0, '.'); from solutions.group_01_linear_algebra.p001_matrix_vector_dot.python import solution_v1; print('Implementation loaded successfully')" 
    ```
 
 4. For benchmarking with customizable options:
+
    ```bash
    python run_final_benchmark.py --problem-id p001_matrix_vector_dot --sizes 128,512,1024,2048
    ```
 
 ## Project Structure
 
-```
+```plaintext
 Problems-kit/
 │
 ├── problems_kit.py                  # Main CLI interface
@@ -158,21 +165,27 @@ Problems-kit/
 The Problems-Kit provides several ways to run benchmarks:
 
 1. **Using the CLI Interface**:
+
    ```bash
    python problems_kit.py
    ```
+
    Navigate to a problem and select the benchmark option.
 
 2. **Direct Benchmark Example**:
+
    ```bash
    python run_benchmark_example.py
    ```
+
    This runs a predefined benchmark for the matrix-vector dot product.
 
 3. **Python-Only Comparison**:
+
    ```bash
    python run_python_implementations.py
    ```
+
    This focuses on comparing Python implementations without CUDA or Triton.
 
 ### Benchmarking Options

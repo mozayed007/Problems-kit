@@ -1003,7 +1003,7 @@ def main():
     parser = argparse.ArgumentParser(description="Problems-Kit Command Line Interface")
     parser.add_argument("--run", help="Run a specific problem (e.g., p001_matrix_vector_dot)")
     parser.add_argument("--impl", choices=["python", "triton", "cuda"], default="python",
-                       help="Implementation to run (default: python)")
+                        help="Implementation to run (default: python)")
     parser.add_argument("--benchmark", help="Run benchmark for a specific problem")
     parser.add_argument("--input-sizes", help="Comma-separated list of input sizes for benchmark")
     parser.add_argument("--runs", type=int, default=10, help="Number of benchmark runs")
