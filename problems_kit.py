@@ -19,6 +19,8 @@ import importlib
 import numpy as np
 from pathlib import Path
 from typing import List, Dict, Any, Optional, Union, Tuple
+import traceback
+import time as perf_time
 
 # Add project root to Python path
 ROOT_DIR = Path(__file__).parent
@@ -37,13 +39,10 @@ except ImportError:
 
 # Import unified benchmarking system modules
 try:
-    # Import the modules and compatibility wrapper
     from utils.bench_runner_enhanced import check_implementation, list_implementations
     from utils.path_manager import ensure_directories_exist
     from utils.compat_wrappers import run_benchmark
-    
-    # Also import the new unified benchmarking system components
-    from utils.benchmark_unified import run_problem_benchmark
+    from utils.benchmark_unified import run_problem_benchmark, save_benchmark_results
     from utils.benchmark_config import BenchmarkConfig
     from utils.enhanced_visualizations import (
         create_performance_plot,
@@ -52,9 +51,7 @@ try:
         generate_complete_visualization_suite
     )
     
-    # Ensure directories exist
     ensure_directories_exist()
-    
     ENHANCED_BENCH_LOADED = True
 except ImportError as e:
     print(f"Warning: Could not import benchmarking modules: {e}")
@@ -136,7 +133,6 @@ def list_groups() -> List[Tuple[str, str]]:
         List of tuples (group_id, group_name)
     """
     if not CATEGORIES_LOADED:
-        # Try to find groups by scanning the solutions directory
         groups = []
         solutions_dir = ROOT_DIR / "solutions"
         if solutions_dir.exists():
@@ -161,7 +157,6 @@ def list_problems_in_group(group_id: str) -> List[Tuple[str, str]]:
         List of tuples (problem_id, problem_title)
     """
     if not CATEGORIES_LOADED:
-        # Try to find problems by scanning the group directory
         problems = []
         group_dir = ROOT_DIR / "solutions" / group_id
         if group_dir.exists():
@@ -190,14 +185,12 @@ def check_implementation(problem_id: str, impl_type: str, variant: str = 'v1') -
         True if the implementation exists, False otherwise
     """
     if ENHANCED_BENCH_LOADED:
-        # Use the enhanced benchmarking implementation registry
         try:
             from utils.bench_runner_enhanced import check_implementation
             return check_implementation(problem_id, impl_type, variant)
         except (ImportError, Exception):
             pass
             
-    # Try to find the problem directory
     problem_path = None
     for group_dir in (ROOT_DIR / "solutions").glob("*"):
         if group_dir.is_dir():
@@ -209,14 +202,12 @@ def check_implementation(problem_id: str, impl_type: str, variant: str = 'v1') -
     if problem_path is None:
         return False
     
-    # Check new directory structure first
     if (problem_path / impl_type).exists():
         if variant == 'v1':
             return (problem_path / impl_type / 'solution_v1.py').exists()
         else:
             return (problem_path / impl_type / f'solution_{variant}.py').exists()
     
-    # Fall back to legacy structure
     if impl_type == 'python':
         return (problem_path / 'solution_py.py').exists()
     else:
@@ -233,7 +224,6 @@ def run_implementation(problem_id: str, impl_type: str, variant: str = 'v1', cus
         variant: Variant of the implementation
         custom_input: Whether to use custom input from the user
     """
-    # Try to find the problem directory
     problem_path = None
     for group_dir in (ROOT_DIR / "solutions").glob("*"):
         if group_dir.is_dir():
@@ -246,17 +236,14 @@ def run_implementation(problem_id: str, impl_type: str, variant: str = 'v1', cus
         print(f"Error: Could not find problem directory for {problem_id}")
         return
     
-    # Check if implementation exists in the enhanced directory structure
     implementation_found = False
     module_path = None
     
-    # Try the new directory structure first (preferred)
     if (problem_path / impl_type).exists():
         if (problem_path / impl_type / f'solution_{variant}.py').exists():
             module_path = f"solutions.{problem_path.parent.name}.{problem_id}.{impl_type}.solution_{variant}"
             implementation_found = True
     
-    # Fall back to the legacy directory structure
     if not implementation_found:
         if impl_type == 'python':
             if (problem_path / 'solution_py.py').exists():
@@ -271,7 +258,6 @@ def run_implementation(problem_id: str, impl_type: str, variant: str = 'v1', cus
         print(f"Error: {impl_type.capitalize()} implementation variant '{variant}' not found for problem {problem_id}")
         return
     
-    # Import the solution module
     try:
         solution_module = importlib.import_module(module_path)
         solution_function = getattr(solution_module, 'solution')
@@ -279,10 +265,8 @@ def run_implementation(problem_id: str, impl_type: str, variant: str = 'v1', cus
         print(f"Error: Failed to import solution module: {e}")
         return
     
-    # Check if the module has a generate_inputs function
     try:
         if hasattr(solution_module, 'generate_inputs'):
-            # Try with custom size if specified
             if custom_input:
                 try:
                     size = int(input("\nEnter input size: "))
@@ -293,7 +277,6 @@ def run_implementation(problem_id: str, impl_type: str, variant: str = 'v1', cus
             else:
                 args, kwargs = solution_module.generate_inputs()
         else:
-            # Try to import the parent module for input generation
             try:
                 parent_module_path = f"solutions.{problem_path.parent.name}.{problem_id}"
                 parent_module = importlib.import_module(parent_module_path)
@@ -317,7 +300,6 @@ def run_implementation(problem_id: str, impl_type: str, variant: str = 'v1', cus
         print(f"Error generating inputs: {e}")
         args, kwargs = [], {}
     
-    # Run the solution
     print(f"\nRunning {impl_type.capitalize()} implementation variant '{variant}'...")
     
     try:
@@ -326,11 +308,9 @@ def run_implementation(problem_id: str, impl_type: str, variant: str = 'v1', cus
         end_time = perf_time.perf_counter()
         execution_time = end_time - start_time
         
-        # Display results
         print("\nResult:")
         print(result)
         
-        # Display execution time
         if execution_time < 0.001:
             time_str = f"{execution_time*1e6:.2f} µs"
         elif execution_time < 1.0:
@@ -448,7 +428,6 @@ def menu_problem_details(problem_id: str, problem_title: str):
         clear_screen()
         print_header(f"PROBLEM: {problem_title}")
         
-        # Get problem details
         problem_info = find_problem_by_id(problem_id)
         
         if problem_info:
@@ -463,7 +442,6 @@ def menu_problem_details(problem_id: str, problem_title: str):
             print(f"Title: {problem_title}")
             print("No additional details available.")
         
-        # Check which implementations are available
         has_python = check_implementation(problem_id, "python")
         has_triton = check_implementation(problem_id, "triton")
         has_cuda = check_implementation(problem_id, "cuda")
@@ -473,7 +451,6 @@ def menu_problem_details(problem_id: str, problem_title: str):
         print(f"  Triton: {'✓' if has_triton else '✗'}")
         print(f"  CUDA:   {'✓' if has_cuda else '✗'}")
         
-        # Show options
         print("\nOptions:")
         option_index = 1
         
@@ -508,7 +485,6 @@ def menu_problem_details(problem_id: str, problem_title: str):
         if choice == 0:
             return
         
-        # Calculate actual option index accounting for unavailable implementations
         python_option = 1
         triton_option = 2
         cuda_option = 3
@@ -536,23 +512,18 @@ def menu_run_implementation(problem_id: str, problem_title: str):
     clear_screen()
     print_header(f"RUN IMPLEMENTATION: {problem_title}")
     
-    # Check which implementation types are available
     implementation_types = []
     
     if ENHANCED_BENCH_LOADED:
-        # Use enhanced implementation registry
         available_implementations = list_implementations(problem_id)
         
-        # Check if any implementations were found
         if not any(available_implementations.values()):
             print("\nNo implementations found for this problem.")
             input("\nPress Enter to continue...")
             return
         
-        # Display available implementation types
         print("\nAvailable implementation types:")
         
-        # Display available implementation types and variants
         all_impls = []
         for impl_type, variants in available_implementations.items():
             if variants:
@@ -561,7 +532,6 @@ def menu_run_implementation(problem_id: str, problem_title: str):
                     print(f"  {i}. {variant}")
                     all_impls.append((impl_type, variant))
     else:
-        # Legacy check
         if check_implementation(problem_id, "python"):
             print_menu_item(1, "Python")
             implementation_types.append("python")
@@ -579,22 +549,18 @@ def menu_run_implementation(problem_id: str, problem_title: str):
         input("\nPress Enter to continue...")
         return
     
-    # Get user's choice of implementation type
     impl_choice = get_user_choice(1, len(implementation_types))
     if impl_choice == 0:
         return
     
     selected_type = implementation_types[impl_choice - 1]
     
-    # Get available variants for the selected implementation type
     if ENHANCED_BENCH_LOADED:
         variants = available_implementations.get(selected_type, [])
         
-        # If only one variant, run it directly
         if len(variants) == 1:
             variant = variants[0]
         else:
-            # Let user select variant
             print(f"\nAvailable {selected_type.capitalize()} variants:")
             for i, variant in enumerate(variants, 1):
                 print_menu_item(i, variant)
@@ -605,10 +571,8 @@ def menu_run_implementation(problem_id: str, problem_title: str):
             
             variant = variants[variant_choice - 1]
     else:
-        # Legacy mode - only v1 available
         variant = 'v1'
     
-    # Ask if user wants to use custom input
     print("\nInput options:")
     print_menu_item(1, "Use default input")
     print_menu_item(2, "Use custom input")
@@ -619,12 +583,10 @@ def menu_run_implementation(problem_id: str, problem_title: str):
     
     custom_input = input_choice == 2
     
-    # Run the implementation
     try:
         run_implementation(problem_id, selected_type, variant, custom_input)
     except Exception as e:
         print(f"\nError running implementation: {e}")
-        import traceback
         traceback.print_exc()
     
     input("\nPress Enter to continue...")
@@ -635,7 +597,6 @@ def menu_run_implementation():
     clear_screen()
     print_header("RUN IMPLEMENTATION")
     
-    # First, select a group
     groups = list_groups()
     if not groups:
         print("\nNo groups found.")
@@ -653,7 +614,6 @@ def menu_run_implementation():
     
     group_id, group_name = groups[group_choice - 1]
     
-    # Then, select a problem
     problems = list_problems_in_group(group_id)
     if not problems:
         print(f"\nNo problems found in group '{group_name}'.")
@@ -671,7 +631,6 @@ def menu_run_implementation():
     
     problem_id, problem_title = problems[problem_choice - 1]
     
-    # Finally, select an implementation
     menu_run_implementation(problem_id, problem_title)
 
 
@@ -684,7 +643,6 @@ def menu_run_benchmark():
     clear_screen()
     print_header("RUN BENCHMARK")
     
-    # First, select a group
     groups = list_groups()
     if not groups:
         print("\nNo groups found.")
@@ -702,7 +660,6 @@ def menu_run_benchmark():
     
     group_id, group_name = groups[group_choice - 1]
     
-    # Then, select a problem
     problems = list_problems_in_group(group_id)
     if not problems:
         print(f"\nNo problems found in group '{group_name}'.")
@@ -739,7 +696,6 @@ def run_benchmark_for_problem(problem_id: str):
     clear_screen()
     print_header(f"Benchmark for Problem: {problem_id}")
     
-    # Get available implementations and variants
     available_impls = list_implementations(problem_id)
     
     if not any(variants for variants in available_impls.values()):
@@ -747,7 +703,6 @@ def run_benchmark_for_problem(problem_id: str):
         input("\nPress Enter to return to the previous menu...")
         return
         
-    # Print available implementations
     print("\nAvailable implementations:")
     implementations_to_bench = []
     for impl_type, variants in available_impls.items():
@@ -756,7 +711,6 @@ def run_benchmark_for_problem(problem_id: str):
             for variant in variants:
                 print(f"  - {variant}")
     
-    # Ask for implementations to benchmark
     print("\nSelect implementations to benchmark:")
     print("1. All available implementations")
     print("2. Python implementations only")
@@ -765,18 +719,15 @@ def run_benchmark_for_problem(problem_id: str):
     choice = get_user_choice(1, 3)
     
     if choice == 1:
-        # All available implementations
         implementations_to_bench = []
         for impl_type, variants in available_impls.items():
             for variant in variants:
                 implementations_to_bench.append((impl_type, variant))
     elif choice == 2:
-        # Python implementations only
         implementations_to_bench = []
         for variant in available_impls.get('python', []):
             implementations_to_bench.append(('python', variant))
     else:
-        # Custom selection
         implementations_to_bench = []
         for impl_type, variants in available_impls.items():
             if variants:
@@ -804,20 +755,16 @@ def run_benchmark_for_problem(problem_id: str):
         input("\nPress Enter to return to the previous menu...")
         return
     
-    # Get benchmark parameters
     print("\nBenchmark Parameters:")
     
-    # Number of runs
     print("\nNumber of runs (default: 5):")
     num_runs_input = input("> ").strip()
     num_runs = int(num_runs_input) if num_runs_input.isdigit() else 5
     
-    # Number of warmup runs
     print("\nNumber of warmup runs (default: 2):")
     warmup_runs_input = input("> ").strip()
     warmup_runs = int(warmup_runs_input) if warmup_runs_input.isdigit() else 2
     
-    # Input sizes for scaling tests
     print("\nInput sizes for scaling tests (comma-separated, default: 128,512,1024,2048):")
     size_input = input("> ").strip()
     if size_input:
@@ -829,7 +776,6 @@ def run_benchmark_for_problem(problem_id: str):
     else:
         input_sizes = [128, 512, 1024, 2048]
     
-    # Visualization options
     print("\nVisualization Options:")
     print("1. Show plots interactively")
     print("2. Save plots to file only")
@@ -839,7 +785,6 @@ def run_benchmark_for_problem(problem_id: str):
     show_plots = viz_choice in [1, 3]
     save_plots = viz_choice in [2, 3]
     
-    # Export options
     print("\nExport Options:")
     print("1. Export results to CSV")
     print("2. Skip CSV export")
@@ -847,15 +792,13 @@ def run_benchmark_for_problem(problem_id: str):
     export_choice = get_user_choice(1, 2)
     export_csv = export_choice == 1
     
-    # Memory tracking
     print("\nMemory Tracking:")
     print("1. Track memory usage")
     print("2. Skip memory tracking")
-    
+     
     memory_choice = get_user_choice(1, 2)
     track_memory = memory_choice == 1
     
-    # Start benchmarking
     print("\nStarting benchmark...")
     print(f"Problem: {problem_id}")
     print(f"Implementations: {implementations_to_bench}")
@@ -864,25 +807,78 @@ def run_benchmark_for_problem(problem_id: str):
     print(f"Input sizes: {input_sizes}")
     
     try:
-        # Run the benchmark using our compatibility wrapper
-        # This automatically uses the unified benchmarking system under the hood
-        print("\nRunning benchmark...")
-        run_benchmark(
-            problem_id=problem_id,
-            implementations=implementations_to_bench,
-            num_runs=num_runs,
-            warmup_runs=warmup_runs,
-            input_sizes=input_sizes,
-            show_plots=show_plots,
-            save_plots=save_plots,
-            export_csv=export_csv,
-            track_memory=track_memory
-        )
-        
-        print("\nBenchmark completed successfully!")
+        try:
+            from datetime import datetime
+            timestamp = datetime.now().strftime('%Y%m%d_%H%M%S')
+            visualization_dir = f"benchmarks/visualizations/{problem_id}_{timestamp}"
+            
+            os.makedirs("benchmarks/csv", exist_ok=True)
+            os.makedirs("benchmarks/json", exist_ok=True)
+            os.makedirs(visualization_dir, exist_ok=True)
+            
+            print("\nRunning benchmark with unified system...")
+            from utils.benchmark_unified import run_problem_benchmark, save_benchmark_results
+            from utils.enhanced_visualizations import generate_complete_visualization_suite
+            
+            config_path = Path(f"configs/benchmarks/{problem_id}_benchmark_config.json")
+            if config_path.exists():
+                print(f"Using configuration from {config_path}")
+            
+            results = run_problem_benchmark(
+                problem_id=problem_id,
+                implementations=implementations_to_bench,
+                input_sizes=input_sizes,
+                num_runs=num_runs,
+                warmup_runs=warmup_runs,
+                config_path=str(config_path) if config_path.exists() else None
+            )
+            
+            if export_csv or save_plots:
+                output_files = save_benchmark_results(results)
+                if export_csv:
+                    print("\nResults saved to:")
+                    for format_name, file_path in output_files.items():
+                        print(f"- {format_name.upper()}: {file_path}")
+            
+            if show_plots or save_plots:
+                print("\nGenerating visualizations...")
+                viz_files = generate_complete_visualization_suite(
+                    results=results,
+                    output_dir=visualization_dir,
+                    problem_id=problem_id,
+                    timestamp=timestamp,
+                    generate_html=save_plots,
+                    show_plots=show_plots
+                )
+                
+                if save_plots:
+                    print("\nVisualizations saved to:")
+                    for viz_type, viz_path in viz_files.items():
+                        if viz_path:
+                            print(f"- {viz_type.capitalize()}: {viz_path}")
+            
+            print("\nBenchmark completed successfully!")
+            
+        except Exception as e:
+            print(f"\nError with unified benchmarking system: {e}")
+            print("Falling back to compatibility wrapper...")
+            
+            run_benchmark(
+                problem_id=problem_id,
+                implementations=implementations_to_bench,
+                num_runs=num_runs,
+                warmup_runs=warmup_runs,
+                input_sizes=input_sizes,
+                show_plots=show_plots,
+                save_plots=save_plots,
+                export_csv=export_csv,
+                track_memory=track_memory
+            )
+            
+            print("\nBenchmark completed successfully!")
+            
     except Exception as e:
         print(f"\nError running benchmark: {e}")
-        import traceback
         traceback.print_exc()
     
     input("\nPress Enter to return to the previous menu...")
@@ -897,7 +893,6 @@ def menu_initialize_problem():
     clear_screen()
     print_header("INITIALIZE NEW PROBLEM")
     
-    # First, select a group
     groups = list_groups()
     if not groups:
         print("\nNo groups found.")
@@ -915,7 +910,6 @@ def menu_initialize_problem():
     
     group_id, group_name = groups[group_choice - 1]
     
-    # Get problem details
     problem_id = input("\nEnter problem ID (e.g., p001_matrix_vector_dot): ")
     if not problem_id:
         print("\nError: Problem ID cannot be empty.")
@@ -929,7 +923,6 @@ def menu_initialize_problem():
     if not problem_description:
         problem_description = f"Implementation of {problem_title}"
     
-    # Select implementations to create
     print("\nSelect implementations to create:")
     print_menu_item(1, "Python only")
     print_menu_item(2, "Python and Triton")
@@ -946,7 +939,6 @@ def menu_initialize_problem():
     else:
         implementations = ["python", "triton", "cuda"]
     
-    # Confirm
     print(f"\nCreating problem {problem_id} in group {group_id}")
     print(f"Title: {problem_title}")
     print(f"Description: {problem_description}")
@@ -956,8 +948,9 @@ def menu_initialize_problem():
     if confirm != 'y':
         return
     
-    # Create the problem structure
     try:
+        from utils.solution_template import create_problem_structure
+        
         problem_dir = create_problem_structure(
             problem_id=problem_id,
             group=group_id,
@@ -966,8 +959,71 @@ def menu_initialize_problem():
             implementations=implementations
         )
         print(f"\nProblem structure created at {problem_dir}")
+        
+        try:
+            configs_dir = Path("configs/benchmarks")
+            os.makedirs(configs_dir, exist_ok=True)
+            
+            import json
+            config = {
+                "problem_id": problem_id,
+                "input_sizes": [128, 512, 1024, 2048],
+                "implementations": [[impl, "v1"] for impl in implementations],
+                "num_runs": 5,
+                "warmup_runs": 2,
+                "error_thresholds": {
+                    "128": 1e-6,
+                    "512": 1e-5,
+                    "1024": 1e-4,
+                    "2048": 2e-4
+                }
+            }
+            
+            config_path = configs_dir / f"{problem_id}_benchmark_config.json"
+            with open(config_path, 'w') as f:
+                json.dump(config, f, indent=4)
+                
+            print(f"Benchmark configuration created at {config_path}")
+            
+        except Exception as e:
+            print(f"Failed to create benchmark configuration: {e}")
+            
     except Exception as e:
         print(f"\nError creating problem structure: {e}")
+        traceback.print_exc()
+
+
+def check_implementation_availability() -> Dict[str, bool]:
+    """Check which implementations are available on the system."""
+    availability = {
+        'python': False,
+        'triton': False,
+        'cuda': False
+    }
+    try:
+        import numpy
+        availability['python'] = True
+    except ImportError:
+        pass
+        
+    try:
+        import triton
+        import torch
+        availability['triton'] = True
+    except ImportError:
+        pass
+    
+    try:
+        import cupy
+        availability['cuda'] = True
+    except ImportError:
+        try:
+            import torch
+            availability['cuda'] = torch.cuda.is_available()
+        except (ImportError, AttributeError):
+            pass
+    
+    return availability
 
 
 def check_available_implementations():
@@ -1011,10 +1067,8 @@ def main():
     args = parser.parse_args()
     
     if args.run:
-        # Run a specific implementation
         run_implementation(args.run, args.impl)
     elif args.benchmark:
-        # Run benchmark
         if args.input_sizes:
             input_sizes = [int(size) for size in args.input_sizes.split(",")]
         else:
@@ -1029,7 +1083,6 @@ def main():
             show_plots=True
         )
     else:
-        # Launch interactive menu
         try:
             menu_main()
         except KeyboardInterrupt:

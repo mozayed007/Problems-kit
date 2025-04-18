@@ -16,9 +16,11 @@ This document provides a step-by-step routine for solving problems using the Pro
 ### Step 2: Set Up Problem Structure
 
 1. Ensure the problem directory exists:
-   ```
+
+   ```plaintext
    solutions/group_XX_category/pXXX_problem_name/
    ```
+
 2. If not, create it with the proper structure:
    - `__init__.py` - Problem registration
    - `python/` folder for Python implementations
@@ -26,6 +28,7 @@ This document provides a step-by-step routine for solving problems using the Pro
    - (Future) `triton/` and `cuda/` folders for GPU implementations
 
 3. Create or update the problem's `__init__.py` with:
+
    ```python
    import numpy as np
    
@@ -78,6 +81,7 @@ This document provides a step-by-step routine for solving problems using the Pro
 ### Step 4: Create a Baseline Python Implementation (v1)
 
 1. Create `python/solution_v1.py` with a basic implementation:
+
    ```python
    import numpy as np
    
@@ -110,6 +114,7 @@ This document provides a step-by-step routine for solving problems using the Pro
    ```
 
 2. Register your implementation in `python/__init__.py`:
+
    ```python
    from .solution_v1 import solution as solution_v1
    
@@ -119,16 +124,19 @@ This document provides a step-by-step routine for solving problems using the Pro
 ### Step 5: Test Your Baseline Implementation
 
 1. Run the comprehensive test script to verify across platforms:
+
    ```bash
    python test_implementations.py
    ```
 
 2. Test your specific implementation with options:
+
    ```bash
    python test_implementations.py --problem=pXXX_problem_name --implementations python.v1
    ```
 
 3. Or create a test helper in your solution file:
+
    ```python
    # Add this to your solution_v1.py file
    if __name__ == "__main__":
@@ -152,6 +160,7 @@ This document provides a step-by-step routine for solving problems using the Pro
 ### Step 6: Benchmark Your Baseline Solution
 
 1. Create a benchmark configuration file in `configs/benchmarks/pXXX_problem_name_benchmark_config.json`:
+
    ```json
    {
        "problem_id": "pXXX_problem_name",
@@ -170,6 +179,7 @@ This document provides a step-by-step routine for solving problems using the Pro
    ```
 
 2. Run the unified benchmarking system:
+
    ```bash
    python run_final_benchmark.py --problem-id pXXX_problem_name
    ```
@@ -181,6 +191,7 @@ This document provides a step-by-step routine for solving problems using the Pro
 ### Step 7: Create an Optimized Python Implementation (v2)
 
 1. Create `python/solution_v2_optimized.py` with improvements:
+
    ```python
    import numpy as np
    
@@ -216,6 +227,7 @@ This document provides a step-by-step routine for solving problems using the Pro
    ```
 
 2. Update the registry in `python/__init__.py`:
+
    ```python
    from .solution_v1 import solution as solution_v1
    from .solution_v2_optimized import solution as solution_v2_optimized
@@ -224,11 +236,13 @@ This document provides a step-by-step routine for solving problems using the Pro
 ### Step 8: Test and Benchmark the Optimized Solution
 
 1. Verify correctness:
+
    ```bash
    python test_implementations.py --problem=pXXX_problem_name --implementations python.v2_optimized
    ```
 
 2. Update your benchmark configuration to include both implementations:
+
    ```json
    {
        "problem_id": "pXXX_problem_name",
@@ -248,11 +262,13 @@ This document provides a step-by-step routine for solving problems using the Pro
    ```
 
 3. Run the unified benchmarking system:
+
    ```bash
    python run_final_benchmark.py --problem-id pXXX_problem_name
    ```
 
 4. Alternatively, use the API directly in a custom script:
+
    ```python
    # Example custom benchmark script using unified system
    import os
@@ -291,7 +307,7 @@ This document provides a step-by-step routine for solving problems using the Pro
 1. Document key findings in your code:
    - Performance bottlenecks identified
    - Optimization techniques used
-   - Percentage improvements 
+   - Percentage improvements
 
 2. Use the visualization outputs from the unified benchmarking system:
    - Review the performance comparison plots (`problem_id_performance_timestamp.png`)
@@ -316,6 +332,7 @@ When you're ready to implement GPU versions on your main PC, follow these struct
 #### Setting Up Triton Implementation
 
 1. Create the Triton implementation directory and files:
+
    ```
    solutions/group_XX_category/pXXX_problem_name/triton/
    solutions/group_XX_category/pXXX_problem_name/triton/__init__.py
@@ -323,6 +340,7 @@ When you're ready to implement GPU versions on your main PC, follow these struct
    ```
 
 2. Create a basic Triton `__init__.py`:
+
    ```python
    # Import implementations - add more as you develop them
    try:
@@ -333,6 +351,7 @@ When you're ready to implement GPU versions on your main PC, follow these struct
    ```
 
 3. Implement a basic Triton solution in `solution_v1.py`:
+
    ```python
    import numpy as np
    import triton
@@ -416,6 +435,7 @@ When you're ready to implement GPU versions on your main PC, follow these struct
 #### Setting Up CUDA Implementation
 
 1. Create the CUDA implementation directory and files:
+
    ```
    solutions/group_XX_category/pXXX_problem_name/cuda/
    solutions/group_XX_category/pXXX_problem_name/cuda/__init__.py
@@ -423,6 +443,7 @@ When you're ready to implement GPU versions on your main PC, follow these struct
    ```
 
 2. Create a basic CUDA `__init__.py`:
+
    ```python
    # Import implementations - add more as you develop them
    try:
@@ -433,6 +454,7 @@ When you're ready to implement GPU versions on your main PC, follow these struct
    ```
 
 3. Implement a basic CUDA solution in `solution_v1.py`:
+
    ```python
    import numpy as np
    import cupy as cp
@@ -474,6 +496,7 @@ When you're ready to implement GPU versions on your main PC, follow these struct
 ### Step 12: Test GPU Implementations
 
 1. Install required dependencies for GPU implementations:
+
    ```bash
    # For Triton
    pip install triton
@@ -483,11 +506,13 @@ When you're ready to implement GPU versions on your main PC, follow these struct
    ```
 
 2. Test your implementations using the same verification framework:
+
    ```bash
    python verify_python_implementation.py
    ```
 
 3. Create a GPU-specific test script:
+
    ```python
    # gpu_test.py
    import numpy as np
@@ -534,6 +559,7 @@ When you're ready to implement GPU versions on your main PC, follow these struct
 #### Triton Optimization Techniques
 
 1. Create an optimized Triton implementation in `triton/solution_v2_optimized.py`:
+
    ```python
    import numpy as np
    import triton
@@ -589,6 +615,7 @@ When you're ready to implement GPU versions on your main PC, follow these struct
 #### CUDA Optimization Techniques
 
 1. Create an optimized CUDA implementation in `cuda/solution_v2_optimized.py`:
+
    ```python
    import numpy as np
    import cupy as cp
@@ -642,6 +669,7 @@ When you're ready to implement GPU versions on your main PC, follow these struct
 ### Step 14: Comprehensive Benchmarking
 
 1. Create a final benchmark configuration that includes all implementations:
+
    ```json
    {
        "problem_id": "pXXX_problem_name",
@@ -669,11 +697,13 @@ When you're ready to implement GPU versions on your main PC, follow these struct
    ```
 
 2. Run the unified benchmarking system:
+
    ```bash
    python run_final_benchmark.py --problem-id pXXX_problem_name
    ```
 
 3. For advanced GPU benchmarking scenarios, create a custom script:
+
    ```python
    # Example: advanced_gpu_benchmark.py
    import os
@@ -750,12 +780,15 @@ If you encounter issues:
    - Check Triton/CuPy version compatibility with your CUDA version
    - Use `nvidia-smi` to check GPU status before running
    - Add memory management to avoid GPU OOM errors:
+
      ```python
      # In your CUDA implementation
      import cupy as cp
      cp.get_default_memory_pool().free_all_blocks()  # Clear memory cache
      ```
+
    - Add proper error handling for GPU-specific issues:
+
      ```python
      try:
          # GPU operation
@@ -768,18 +801,21 @@ If you encounter issues:
      ```
 
 5. Start with smaller input sizes to isolate issues:
+
    ```python
    # In generate_inputs
    def generate_inputs(size=100):  # Use smaller size for debugging
    ```
 
 6. Use path management to avoid file access issues:
+
    ```python
    from utils.path_manager import ensure_directories_exist
    ensure_directories_exist()  # Before saving any files
    ```
 
 7. For GPU-specific debugging:
+
    ```python
    # In your GPU implementation
    print(f"GPU memory usage before: {cp.cuda.Device().mem_info[0]/1e9:.2f} GB free")

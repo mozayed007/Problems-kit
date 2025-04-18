@@ -1,36 +1,66 @@
 # Problems-Kit User Guide
 
+## Overview
+
 *A comprehensive system for implementing and benchmarking algorithms across Python, Triton, and CUDA platforms*
 
 ## Table of Contents
 
-- [Introduction](#introduction)
-- [System Requirements](#system-requirements)
-- [Getting Started](#getting-started)
-- [Implementing Solutions](#implementing-solutions)
-  - [Solution Structure](#solution-structure)
-  - [Implementation Variants](#implementation-variants)
-  - [Metadata System](#metadata-system)
-- [Running and Testing Implementations](#running-and-testing-implementations)
-  - [Using the CLI](#using-the-cli)
-  - [Direct Testing](#direct-testing)
-  - [Custom Testing Scripts](#custom-testing-scripts)
-- [Benchmarking System](#benchmarking-system)
-  - [Unified Benchmarking Framework](#unified-benchmarking-framework)
-  - [Configuration-Driven Benchmarks](#configuration-driven-benchmarks)
-  - [Input Generation System](#input-generation-system)
-  - [Advanced Visualization Suite](#advanced-visualization-suite)
-  - [Data Export Options](#data-export-options)
-- [Directory Structure](#directory-structure)
-- [Routine Problem-Solving Workflow](#routine-problem-solving-workflow)
-- [Debugging the System](#debugging-the-system)
-  - [Common Issues](#common-issues)
-  - [Debugging Implementations](#debugging-implementations)
-  - [Debugging Benchmarks](#debugging-benchmarks)
-  - [Logging System](#logging-system)
-- [System Maintenance](#system-maintenance)
-- [Extending the System](#extending-the-system)
-- [FAQ](#faq)
+- [Problems-Kit User Guide](#problems-kit-user-guide)
+  - [Overview](#overview)
+  - [Table of Contents](#table-of-contents)
+  - [Introduction](#introduction)
+  - [System Requirements](#system-requirements)
+    - [Basic Setup (Python Only)](#basic-setup-python-only)
+    - [Full System (with GPU Acceleration)](#full-system-with-gpu-acceleration)
+  - [Getting Started](#getting-started)
+    - [Installation](#installation)
+    - [Using the CLI Interface](#using-the-cli-interface)
+  - [Implementing Solutions](#implementing-solutions)
+    - [Solution Structure](#solution-structure)
+    - [Implementation Variants](#implementation-variants)
+    - [Metadata System](#metadata-system)
+  - [Running and Testing Implementations](#running-and-testing-implementations)
+    - [Using the CLI](#using-the-cli)
+    - [Direct Testing](#direct-testing)
+    - [Custom Testing Scripts](#custom-testing-scripts)
+  - [Benchmarking System](#benchmarking-system)
+    - [Unified Benchmarking Framework](#unified-benchmarking-framework)
+    - [Configuration-Driven Benchmarks](#configuration-driven-benchmarks)
+    - [Input Generation System](#input-generation-system)
+    - [Advanced Visualization Suite](#advanced-visualization-suite)
+    - [Data Export Options](#data-export-options)
+    - [Visualization Options](#visualization-options)
+  - [Directory Structure](#directory-structure)
+  - [Routine Problem-Solving Workflow](#routine-problem-solving-workflow)
+  - [Debugging the System](#debugging-the-system)
+    - [Common Issues](#common-issues)
+      - [Import Errors](#import-errors)
+      - [Function Signature Mismatches](#function-signature-mismatches)
+      - [Memory Issues](#memory-issues)
+      - [File Path Issues](#file-path-issues)
+    - [Debugging Implementations](#debugging-implementations)
+    - [Debugging Benchmarks](#debugging-benchmarks)
+    - [Logging System](#logging-system)
+    - [Script to Verify System Components](#script-to-verify-system-components)
+  - [Common Error Messages and Solutions](#common-error-messages-and-solutions)
+  - [GPU Implementations](#gpu-implementations)
+    - [GPU Requirements](#gpu-requirements)
+    - [Triton Implementation Guide](#triton-implementation-guide)
+      - [Basic Triton Template](#basic-triton-template)
+      - [Common Triton Optimization Techniques](#common-triton-optimization-techniques)
+      - [Triton Debugging Tips](#triton-debugging-tips)
+    - [CUDA Implementation Guide](#cuda-implementation-guide)
+      - [Basic CUDA Template](#basic-cuda-template)
+      - [Advanced CUDA Techniques](#advanced-cuda-techniques)
+      - [Matrix-Vector Dot Product CUDA Example](#matrix-vector-dot-product-cuda-example)
+  - [Transitioning from Python to GPU](#transitioning-from-python-to-gpu)
+  - [Debugging GPU Implementations](#debugging-gpu-implementations)
+  - [Best Practices for GPU Implementations](#best-practices-for-gpu-implementations)
+  - [Common GPU Issues and Solutions](#common-gpu-issues-and-solutions)
+  - [Transitioning from Python to GPU](#transitioning-from-python-to-gpu-1)
+  - [Debugging GPU Implementations](#debugging-gpu-implementations-1)
+  - [Best Practices for GPU Implementations](#best-practices-for-gpu-implementations-1)
 
 ## Introduction
 
@@ -45,12 +75,14 @@ Each problem can have multiple implementation variants per platform, allowing yo
 ## System Requirements
 
 ### Basic Setup (Python Only)
+
 - Python 3.7+
 - NumPy
 - Matplotlib
 - Scipy
 
 ### Full System (with GPU Acceleration)
+
 - NVIDIA GPU with CUDA support
 - CUDA Toolkit 11.0+
 - CuPy package
@@ -62,12 +94,14 @@ Each problem can have multiple implementation variants per platform, allowing yo
 ### Installation
 
 1. Clone the repository:
+
    ```bash
    git clone <repository-url>
    cd Problems-kit
    ```
 
 2. Set up a Python virtual environment (recommended):
+
    ```bash
    python -m venv venv
    # On Windows
@@ -77,6 +111,7 @@ Each problem can have multiple implementation variants per platform, allowing yo
    ```
 
 3. Install dependencies:
+
    ```bash
    pip install numpy matplotlib scipy
    # If you have a GPU and want to use Triton/CUDA
@@ -92,6 +127,7 @@ python problems_kit.py
 ```
 
 This opens the main menu with these options:
+
 1. **Browse Problems by Group**: View and select problems organized by category
 2. **Run Implementation**: Execute a specific implementation
 3. **Run Benchmark**: Benchmark and compare implementations
@@ -321,6 +357,7 @@ viz_files = generate_complete_visualization_suite(
 ```
 
 Visualization capabilities include:
+
 - Performance comparison plots with error bars
 - Scaling analysis comparing to theoretical complexity bounds (O(n), O(n log n), O(n²))
 - Numerical accuracy verification and error reporting
@@ -330,7 +367,7 @@ Visualization capabilities include:
 
 Benchmark results are automatically exported in multiple formats:
 
-```
+```plaintext
 # CSV format for tabular analysis
 benchmarks/csv/p001_matrix_vector_dot_benchmark_20250407_181517.csv
 
@@ -345,6 +382,7 @@ benchmarks/visualizations/html/p001_matrix_vector_dot_dashboard_20250407_181517.
 ```
 
 The exports include comprehensive data:
+
 - Implementation details and input sizes
 - Timing statistics (mean, median, min, max, std)
 - Numerical accuracy and error thresholds
@@ -366,7 +404,7 @@ Benchmarks generate several visualization types:
 
 The Problems-Kit is organized with the following directory structure:
 
-```
+```plaintext
 Problems-kit/
 │
 ├── problems_kit.py                  # Main CLI interface
@@ -433,6 +471,7 @@ Follow this routine workflow for solving problems efficiently:
 
 3. **Problem Initialization**
    - If the problem directory doesn't exist:
+
      ```bash
      python problems_kit.py
      # Select option 4 (Initialize New Problem)
@@ -481,17 +520,20 @@ Follow this routine workflow for solving problems efficiently:
 If you see `ImportError` or `ModuleNotFoundError`:
 
 1. **Check the directory structure**:
+
    ```bash
    find solutions -name "__init__.py" | sort
    ```
 
 2. **Verify Python Path**:
+
    ```python
    import sys
    print(sys.path)
    ```
 
 3. **Use explicit imports**:
+
    ```python
    # Instead of relative imports
    from .solution_v1 import solution
@@ -504,7 +546,8 @@ If you see `ImportError` or `ModuleNotFoundError`:
    If you have modules importing each other, restructure your code to avoid this pattern.
 
 5. **Check module load order**:
-   Add print statements to your __init__.py files to verify they're being loaded:
+   Add print statements to your **init**.py files to verify they're being loaded:
+
    ```python
    print(f"Loading module {__name__}")
    ```
@@ -514,6 +557,7 @@ If you see `ImportError` or `ModuleNotFoundError`:
 If you get errors like `solution() missing required positional arguments`:
 
 1. **Check the function signature** in your implementation against what's expected:
+
    ```python
    # Expected signature
    def solution(matrix, vector):
@@ -525,6 +569,7 @@ If you get errors like `solution() missing required positional arguments`:
    ```
 
 2. **Verify input generation** is returning the correct structure:
+
    ```python
    def generate_inputs(size=1000):
        # Add debugging
@@ -535,7 +580,8 @@ If you get errors like `solution() missing required positional arguments`:
        return args, kwargs
    ```
 
-3. **Check implementation registry** in __init__.py files:
+3. **Check implementation registry** in **init**.py files:
+
    ```python
    print(f"Registered implementations: {IMPLEMENTATIONS.keys()}")
    for key, impl in IMPLEMENTATIONS.items():
@@ -547,6 +593,7 @@ If you get errors like `solution() missing required positional arguments`:
 For out-of-memory errors:
 
 1. **Reduce input sizes** for testing:
+
    ```python
    # Change from
    input_sizes = [1000, 2000, 4000, 8000]
@@ -555,6 +602,7 @@ For out-of-memory errors:
    ```
 
 2. **Monitor memory usage**:
+
    ```python
    import psutil
    import os
@@ -570,6 +618,7 @@ For out-of-memory errors:
    ```
 
 3. **Use memory profiling**:
+
    ```python
    import tracemalloc
    
@@ -581,6 +630,7 @@ For out-of-memory errors:
    ```
 
 4. **Free memory** when possible:
+
    ```python
    import gc
    
@@ -595,6 +645,7 @@ For out-of-memory errors:
 If you encounter file not found errors:
 
 1. **Use absolute paths** with Path from pathlib:
+
    ```python
    from pathlib import Path
    
@@ -605,6 +656,7 @@ If you encounter file not found errors:
    ```
 
 2. **Enable path debugging**:
+
    ```python
    def find_file(filename, search_path="."):
        """Search for a file and print all locations checked."""
@@ -622,6 +674,7 @@ If you encounter file not found errors:
    ```
 
 3. **Verify directory creation**:
+
    ```python
    def ensure_dir(directory):
        """Ensure a directory exists and print status."""
@@ -638,6 +691,7 @@ If you encounter file not found errors:
 ### Debugging Implementations
 
 1. **Add Debug Mode**:
+
    ```python
    def debug_solution(matrix, vector, debug=False):
        if debug:
@@ -664,6 +718,7 @@ If you encounter file not found errors:
    ```
 
 2. **Step-by-Step Execution**:
+
    ```python
    def solution(matrix, vector):
        print("Step 1: Validating inputs")
@@ -695,6 +750,7 @@ If you encounter file not found errors:
    ```
 
 3. **Performance Tracking**:
+
    ```python
    import time
    
@@ -726,6 +782,7 @@ If you encounter file not found errors:
    ```
 
 4. **Intermediate Results Visualization**:
+
    ```python
    import matplotlib.pyplot as plt
    
@@ -751,6 +808,7 @@ If you encounter file not found errors:
 ### Debugging Benchmarks
 
 1. **Single Run Mode**:
+
    ```python
    from utils.bench_runner_enhanced import run_benchmark
    
@@ -768,6 +826,7 @@ If you encounter file not found errors:
 
 2. **Verbose Logging**:
    Add a `verbose` parameter to key functions in the benchmarking system:
+
    ```python
    def run_benchmark(..., verbose=False):
        if verbose:
@@ -780,6 +839,7 @@ If you encounter file not found errors:
 
 3. **Step-by-Step Benchmark**:
    Create a manual benchmark function to test each component individually:
+
    ```python
    def manual_benchmark(problem_id, impl_type, variant):
        """Run a manual step-by-step benchmark for debugging."""
@@ -836,6 +896,7 @@ If you encounter file not found errors:
 
 4. **Debug Export Paths**:
    Verify that all paths for saving results exist:
+
    ```python
    from utils.path_manager import ensure_directories_exist
    
@@ -1019,11 +1080,11 @@ if __name__ == "__main__":
 
 | Error Message | Likely Cause | Solution |
 |---------------|--------------|----------|
-| `ModuleNotFoundError: No module named 'solutions.group_01_linear_algebra'` | Python path issue or missing __init__.py file | Add the root directory to the Python path or create missing __init__.py files |
+| `ModuleNotFoundError: No module named 'solutions.group_01_linear_algebra'` | Python path issue or missing **init**.py file | Add the root directory to the Python path or create missing **init**.py files |
 | `AttributeError: module 'solutions.group_01_linear_algebra.p001_matrix_vector_dot.python.solution_v1' has no attribute 'solution'` | Function not defined in module | Ensure function is named 'solution' or update the registry to use the correct name |
 | `TypeError: solution() missing 1 required positional argument: 'vector'` | Input generation issue | Check that generate_inputs returns the correct number of arguments with the right shapes |
 | `MemoryError` | Input sizes too large | Reduce input sizes or process in chunks |
-| `KeyError: 'v2_optimized'` | Implementation variant not registered | Check implementation registry in __init__.py |
+| `KeyError: 'v2_optimized'` | Implementation variant not registered | Check implementation registry in **init**.py |
 | `FileNotFoundError: [Errno 2] No such file or directory: 'benchmarks/csv/...'` | Missing directory | Use `from utils.path_manager import ensure_directories_exist` and call `ensure_directories_exist()` before operations that save files |
 
 ---
@@ -1053,6 +1114,7 @@ Before working with GPU implementations, ensure your system meets these requirem
 
 3. **Verification**:
    Before implementing, verify your GPU setup:
+
    ```bash
    # Check NVIDIA driver and CUDA version
    nvidia-smi
@@ -1224,12 +1286,14 @@ def kernel_with_shared_memory(
 #### Triton Debugging Tips
 
 1. **Shape and Type Validation**: Always verify input shapes and types:
+
    ```python
    assert input_data.dtype == np.float32, "Input must be float32"
    assert len(input_data.shape) == 2, "Input must be 2D (matrix)"
    ```
 
 2. **Error Handling**: Catch and report Triton-specific errors:
+
    ```python
    try:
        result = triton_solution(matrix, vector)
@@ -1240,6 +1304,7 @@ def kernel_with_shared_memory(
    ```
 
 3. **Debug Printing**: Add debug prints for GPU configurations:
+
    ```python
    print(f"Grid dimensions: {grid}")
    print(f"Input shape: {input_data.shape}")
@@ -1294,6 +1359,7 @@ IMPLEMENTATION_METADATA = {
 #### Advanced CUDA Techniques
 
 1. **Custom CUDA Kernels** with CuPy:
+
    ```python
    kernel_code = r'''
    extern "C" __global__
@@ -1329,6 +1395,7 @@ IMPLEMENTATION_METADATA = {
    ```
 
 2. **Stream Processing** for concurrent operations:
+
    ```python
    def solution(matrix_a, matrix_b, matrix_c):
        """Matrix-vector multiplication distributed across multiple GPUs."""
@@ -1364,6 +1431,7 @@ IMPLEMENTATION_METADATA = {
    ```
 
 3. **Memory Management** for large-scale operations:
+
    ```python
    def solution(large_matrix):
        # Clear GPU memory cache before operation
@@ -1471,6 +1539,7 @@ To effectively transition from Python to GPU implementations:
 When debugging GPU implementations, add the following to your toolkit:
 
 1. **GPU Memory Monitoring**
+
    ```python
    # Add this to your solution function for debugging
    def debug_solution(matrix, vector, debug=True):
@@ -1491,6 +1560,7 @@ When debugging GPU implementations, add the following to your toolkit:
    ```
 
 2. **Gradual Problem Size Scaling**
+
    ```python
    # Create a script that gradually increases problem size to find limits
    import numpy as np
@@ -1536,6 +1606,7 @@ When debugging GPU implementations, add the following to your toolkit:
    ```
 
 3. **Verification Using Small Data**
+
    ```python
    def verify_implementations():
        # Create small test case where results are easily verified
@@ -1576,6 +1647,7 @@ When debugging GPU implementations, add the following to your toolkit:
 3. **Performance Measurement**:
    - Always include GPU initialization and memory transfers in benchmarks.
    - Use event timers for accurate kernel timing:
+
      ```python
      # CUDA timing example
      start_event = cp.cuda.Event()
@@ -1592,6 +1664,7 @@ When debugging GPU implementations, add the following to your toolkit:
      ```
 
 4. **Multi-GPU Support** (for advanced implementations):
+
    ```python
    def solution_multi_gpu(matrix, vector):
        """Matrix-vector multiplication distributed across multiple GPUs."""
@@ -1654,6 +1727,7 @@ To effectively transition from Python to GPU implementations:
 When debugging GPU implementations, add the following to your toolkit:
 
 1. **GPU Memory Monitoring**
+
    ```python
    # Add this to your solution function for debugging
    def debug_solution(matrix, vector, debug=True):
@@ -1674,6 +1748,7 @@ When debugging GPU implementations, add the following to your toolkit:
    ```
 
 2. **Gradual Problem Size Scaling**
+
    ```python
    # Create a script that gradually increases problem size to find limits
    import numpy as np
@@ -1719,6 +1794,7 @@ When debugging GPU implementations, add the following to your toolkit:
    ```
 
 3. **Verification Using Small Data**
+
    ```python
    def verify_implementations():
        # Create small test case where results are easily verified
@@ -1759,6 +1835,7 @@ When debugging GPU implementations, add the following to your toolkit:
 3. **Performance Measurement**:
    - Always include GPU initialization and memory transfers in benchmarks.
    - Use event timers for accurate kernel timing:
+
      ```python
      # CUDA timing example
      start_event = cp.cuda.Event()
@@ -1775,6 +1852,7 @@ When debugging GPU implementations, add the following to your toolkit:
      ```
 
 4. **Multi-GPU Support** (for advanced implementations):
+
    ```python
    def solution_multi_gpu(matrix, vector):
        """Matrix-vector multiplication distributed across multiple GPUs."""
